@@ -1,73 +1,101 @@
 <template>
     <div id="app">
-        <my-header></my-header>
-        <div class="clearfix"></div>
-        <section class="myrow" >
-            <nav>
-                <left-nav></left-nav>
-            </nav>
-            
-            <section id="container">
-                  <keep-alive>
-                      <transition name="el-fade-in">
-                         <router-view></router-view>
-                      </transition>  
-                  </keep-alive>
-            </section>
-        </section>
-
-        <notice></notice>
+        <transition name="fade"
+                    mode="out-in">
+            <router-view></router-view>
+        </transition>
     </div>
 </template>
 
 <script>
-
-import Header from './components/Header.vue'
-import leftNav from './components/leftNav.vue'
-import notice from './components/notice.vue'
-
-export default {
-    name: 'app',
-    data () {
-      return {
-        msg: 'Hello vue.js'
-      }
-    },
-    components:{
-      'myHeader':Header,
-      'leftNav':leftNav,
-      'notice':notice
+    export default {
+        name: 'app',
+        components: {},
+        data() {
+            return {
+                visible: true
+            }
+        },
+        methods: {
+            close() {
+                this.visible = false;
+            }
+        }
     }
-}
 </script>
 
-<style  scoped>
-    #app{
-      height: 100%;
-    }
-    .clearfix{
-      clear: both;
-    }
-    .myrow{
-      height: 90.5%;
-      margin-top: -1px;
+<style lang="scss">
+    body {
+        margin: 0px;
+        padding: 0px;
+        font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+        font-size: 14px;
+        -webkit-font-smoothing: antialiased;
     }
 
-    .el-pager li .number{
-      border: 1px solid gray!important;
-      border-radius: 4px!important;
+    #app {
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        width: 100%;
     }
 
-    nav {
-      width: 17%;
-      height: 100%;
-      float: left;
+    .el-submenu [class^=fa] {
+        vertical-align: baseline;
+        margin-right: 10px;
     }
 
-    #container{
-      width: 82.9%;
-      height:100%;
-      float: right;
-      overflow-y: auto;
+    .el-menu-item [class^=fa] {
+        vertical-align: baseline;
+        margin-right: 10px;
+    }
+
+    .toolbar {
+        background: #f2f2f2;
+        padding: 10px;
+        //border:1px solid #dfe6ec;
+        margin: 10px 0px;
+        .el-form-item {
+            margin-bottom: 10px;
+        }
+    }
+
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: all .2s ease;
+    }
+
+    .fade-enter,
+    .fade-leave-active {
+        opacity: 0;
+    }
+
+    .fork-me-github {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: 0;
+    }
+
+    .alipay-adv {
+        position: fixed;
+        right: 20px;
+        bottom: 0;
+        width: 300px;
+        height: auto;
+    }
+
+    .alipay-adv img {
+        width: 100%;
+    }
+
+    .close-adv {
+        position: absolute;
+        right: 8px;
+        top: -15px;
+        background: #fff;
+        padding: 0 5px;
+        font-size: 12px;
+        cursor: pointer;
     }
 </style>

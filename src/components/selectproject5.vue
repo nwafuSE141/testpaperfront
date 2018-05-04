@@ -81,7 +81,7 @@
         },
         mounted(){
             //监听组件的要求显示信息事件
-            bus.$on('addData3', data =>{
+            bus.$on('addData5', data =>{
                 for (var index in this.tableData) {
                      if (this.tableData[index].id == data.id) {
                          return false;
@@ -93,7 +93,7 @@
             //监听组件的需要数据事件
             bus.$on('needids', data => {
                 if (data) {      //将本题型所选择的题目id发往该组件
-                    bus.$emit('id3',this.collectID(this.tableData));
+                    bus.$emit('id5',this.collectID(this.tableData));
                 }
             });
 

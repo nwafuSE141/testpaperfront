@@ -8,6 +8,10 @@
                 highlight-current-row
                 :cell-style="styleFunc">
                 <el-table-column
+                type="index"
+                width="50">
+                </el-table-column>
+                <el-table-column
                 prop="id"
                 label="ID"
                 width="60"
@@ -15,44 +19,44 @@
                 show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column
-                prop="level"
-                label="难易等级"
-                width="78"
-                align="center"
-                show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column
-                prop="chapter"
-                label="所属章节"
-                width="83"
-                align="center"
-                show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column
                 prop="question"
-                label="问题描述"
+                label="题干"
                 width="350"
+                align="center"
+                show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column
+                prop="optioncontent"
+                label="选项内容"
+                width="250"
                 align="center"
                 show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column
                 prop="answer"
                 label="答案"
+                width="250"
+                align="center"
+                show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column
+                prop="score"
+                label="分值"
                 width="80"
                 align="center"
                 show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column
-                prop="imgName"
-                label="图片"
-                width="90"
+                prop="usageCount"
+                label="使用次数"
+                width="80"
                 align="center"
                 show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column
-                prop="additional"
+                prop="faq"
                 label="备注"
-                width="138"
+                width="150"
                 align="center"
                 show-overflow-tooltip>
                 </el-table-column>
@@ -61,7 +65,6 @@
                 width="150"
                 align="center">
                     <template slot-scope="scope">
-                        <el-button @click="handleLook(scope.row)" type="primary" size="mini"><i class="el-icon-view"></i></el-button>
                         <el-button  size="mini" type="warning" @click="deleteItem(scope.row.id)"><i class="el-icon-delete"></i></el-button>
                     </template>
                 </el-table-column>              
@@ -96,9 +99,6 @@
 
         },
         methods:{
-            handleLook(param){  //查看题目
-                bus.$emit('look',{flag:true,value:param});
-            },
             deleteItem(id){//删除题目
                 this.searchPlace(this.tableData,id);
             },

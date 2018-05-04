@@ -8,7 +8,7 @@
     text-color="#fff"
     active-text-color="#ffd04b">
         <div id="title">
-            《数据库原理》出卷系统
+            组卷系统
         </div>
 
         <div id="notice">
@@ -53,8 +53,8 @@
    }
    
    #notice{
-       float: left;
-       margin-left: 600px;
+       float: right;
+       margin-right: 60px;
        margin-top: 10px;
 
    }

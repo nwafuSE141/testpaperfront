@@ -7,9 +7,9 @@
     :custom-class="activeClass"
     :close-on-click-modal="myFlag">
             <div>
-                你知道吗？亲！<br><br> 
-                这是我们微瞰科技的第一个正式系统。是程序员哥哥们的辛勤敲代码得到的产品，欢迎鼓励。
-                <br><br>我们此后的征途是星辰大海 ^_^
+               
+               简单版本
+                
             </div>
 
             <div slot="footer" class="dialog-footer">
