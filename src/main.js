@@ -21,11 +21,11 @@ Vue.prototype.searchPlace = (arr, id) => { //全局方法，用于删除数组�
 }
 
 Vue.prototype.collectID = (arr) => {
-    var str = '';
+    let res = []
     for (var index in arr) {
-        str += `${arr[index].id},`;
+        res.push(`${arr[index].id}`);
     }
-    return str;
+    return res;
 }
 
 

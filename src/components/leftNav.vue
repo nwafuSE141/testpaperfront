@@ -1,7 +1,7 @@
 <template>
     <el-menu
-      default-active="1"
-      router
+      :default-active="activeMenu"
+      
       class="el-menu-vertical"
       @select="handleSelect"
       @open="handleOpen"
@@ -27,8 +27,11 @@
           <i class="el-icon-circle-check"></i>
           <span slot="title">组合试卷</span>
       </el-menu-item>
-
       <el-menu-item index="5">
+        <i class="el-icon-menu"></i>
+        <span slot="title">查看试卷</span>
+      </el-menu-item>
+      <el-menu-item index="6">
         <i class="el-icon-menu"></i>
         <span slot="title">导出试卷</span>
       </el-menu-item>
@@ -39,9 +42,20 @@
 
 <script>
     export default {
+    data(){
+      return {
+        activeMenu: '1'
+      }
+    },
+    mounted(){
+      if(sessionStorage.getItem('curRouter'))this.activeMenu = '' + sessionStorage.getItem('curRouter')
+      this.$router.push(sessionStorage.getItem('curRouter') || this.activeMenu)
+    },
     methods: {
       handleSelect(key, keyPath){
-        
+        this.activeMenu = '' + key
+        sessionStorage.setItem('curRouter', this.activeMenu)
+        this.$router.push(this.activeMenu)
       },
       handleOpen(key, keyPath) {
         

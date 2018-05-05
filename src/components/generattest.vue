@@ -1,21 +1,8 @@
 <template>
     <div class="loadingmain">
         <section>
-            <h3 class="title">抽取选择题</h3>
-            <el-form v-model="select" :inline="true" class="form-inline">
-                <el-form-item label="简单" class="point">
-                    <el-input v-model="select.esay" class="myinput" type="number"></el-input>%
-                </el-form-item>
-                <el-form-item label="复杂" class="point">
-                    <el-input v-model="select.normal" class="myinput" type="number"></el-input>%
-                </el-form-item>
-                <el-form-item label="题量" class="point">
-                    <el-input v-model="select.number" class="myinput" type="number"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="reset()">重置</el-button>
-                </el-form-item>
-            </el-form>
+            <h3 class="title">试卷题目</h3>
+            <el-input v-model="input" placeholder="请输入试卷题目" style="width: 400px;"></el-input>
         </section>
         <section>
             <h3 class="title">抽取非选择题</h3>
@@ -60,7 +47,7 @@
         </div>
         </section>
         <hr>
-        <h3>已选题目：</h3>
+        <h3 class="title">已选题目：</h3>
         <el-tabs v-model="activeName"  type="border-card">
             <el-tab-pane label="单选题" name="first">
                 <selectproject1></selectproject1>
@@ -98,11 +85,8 @@
     export default {
         data() {
             return {
-                select: {
-                    esay: 80,
-                    normal: 20,
-                    number: 25
-                },
+                input: '',
+                userInfo: {},
                 type: '10001',
                 currentPage: 1,
                 count: 400,
@@ -110,7 +94,7 @@
                 loading: true,
                 activeName: 'first', //标签页当前激活位置
                 //保存发往服务器端的各题型数据
-                simpleSelect: '', //选择题
+                singleSelect: '', //选择题
                 multipleSelect: '', //简答题
                 fillblank: '', //求解题
                 tureorfalse: '', //设计题
@@ -160,22 +144,6 @@
                     _this.loading = false
                 }, 500)
                 this.currentPage = val;
-                // this.axios.get('http://localhost:8080/getQuestions', {
-                //         params: {
-                //             page: val,
-                //             limit: 20,
-                //             type: this.type
-                //         }
-                //     })
-                //     .then(res => {
-                //         this.loading = false;
-                //         this.tableData = res.data.data;
-                //         this.count = res.data.count;
-                //     })
-                //     .catch(res => {
-                //         this.loading = false;
-                //         console.log("error");
-                //     })
             },
             styleFunc(row, rowIndex) { //更改表格样式
                 return {
@@ -185,50 +153,33 @@
                 }
             },
             productProtect() { //生成试卷
-            bus.$emit('needids', true);
-            console.log(this.shortAnswers)
-            // console.log(this.selectQuestions)
-            // console.log(this.shortAnswers)
-            // console.log(this.solvingProblems)
-            // console.log(this.designQuestions)
-                //判断抽取的选择题比例之和是否为100%
-                // if (Number(this.select.esay) + Number(this.select.normal) != 100) {
-                //     this.$message.error('单项选择题所选比例之和必须为100！');
-                //     return false;
-                // }
-                // if (Number(this.select.number) < 10) {
-                //     this.$message.error('您选择的单项选择题题量过少，请重新选择！');
-                //     return false;
-                // }
-                // this.selectQuestions = `${this.select.esay},${this.select.normal}`;
-                // //向各保存非选择题题型的组件发送信息，让它们传送所保存题目的id过来，以便上传服务器
-                // bus.$emit('needids', true);
-                // //等获取了各组件发来的题型数据以后再发送请求（DOM更新后）
-                // this.$nextTick(function() {
-                //     let loadingInstance = Loading.service({
-                //         lock: true,
-                //         text: '正在生成试卷...',
-                //         spinner: 'el-icon-loading',
-                //         background: 'rgba(0, 0, 0, 0.8)'
-                //     }); //加载加载条
-                //     //将抽题信息发往服务端
-                //     var params = new URLSearchParams();
-                //     params.append("selectQuestionsNumber", this.select.number);
-                //     params.append("selectQuestions", this.selectQuestions);
-                //     params.append("shortAnswers", this.shortAnswers);
-                //     params.append("solvingProblems", this.solvingProblems);
-                //     params.append("designQuestions", this.designQuestions);
-                //     params.append("applicationProblems", this.applicationProblems);
-                //     this.axios.post('http://localhost:8080/takeQuestionnaire', params)
-                //         .then(res => {
-                //             loadingInstance.close(); //关闭加载条
-                //             this.$message.success('生成成功！');
-                //         })
-                //         .catch(res => {
-                //             loadingInstance.close(); //关闭加载条
-                //             this.$message.error('生成失败！');
-                //         })
-                // })
+                bus.$emit('needids', true);
+                let resObj = {'userid': Number(this.userInfo.username)}
+                resObj.name = this.input
+                resObj.singleSelect = this.singleSelect.map(v => Number(v))
+                resObj.multipleSelect = this.multipleSelect.map(v => Number(v))
+                resObj.fillblank = this.fillblank.map(v => Number(v))
+                resObj.tureorfalse = this.tureorfalse.map(v => Number(v))
+                resObj.quesAndAns = this.quesAndAns.map(v => Number(v))
+                if(this.singleSelect.length != 3){
+                    this.$message.error('单项选择题数目必须为3！');
+                    return false
+                }
+                if(this.multipleSelect.length == 0 || this.fillblank.length == 0 || this.tureorfalse.length == 0 || this.quesAndAns == 0){
+                    this.$message.error('所有题型不能为空');
+                    return false
+                }
+                this.$nextTick(function() {
+                    this.axios.post('http://172.19.12.23:8888/paperorganize/addpaper', resObj)
+                    .then(res => {
+                        console.log(res)
+                        this.loading = false;
+                    })
+                    .catch(res => {
+                        this.loading = false;
+                        console.log("error");
+                    })
+                })
             }
         },
         components: {
@@ -240,11 +191,12 @@
             selectproject5,
         },
         mounted() {
+            this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
             //默认请求第一类数据
             this.getQuestionHandle()
             //获取各保存非选择题题型的组件发来的数据
             bus.$on('id1', data => {
-                this.simpleSelect = data;
+                this.singleSelect = data;
             });
             bus.$on('id2', data => {
                 this.multipleSelect = data;

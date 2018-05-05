@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>欢迎使用盐城师范学院《数据库原理》出卷系统</h1>
+        <h1>欢迎使用组卷系统</h1>
         <div id="main"></div>
     </div>
 </template>
@@ -68,15 +68,15 @@
         },
         mounted(){
             //请求数据
-            this.axios.get('http://localhost:8080/getDiffNumbers')
-            .then ( res => {
-                this.typedistribution = res.data;
-                 //画图
-                this.drawLine();
-            })
-            .catch( res => {
-                console.log('error');
-            })    
+            // this.axios.get('http://localhost:8080/getDiffNumbers')
+            // .then ( res => {
+            //     this.typedistribution = res.data;
+            //      //画图
+            //     this.drawLine();
+            // })
+            // .catch( res => {
+            //     console.log('error');
+            // })    
         }
     }
 </script>

@@ -6,6 +6,7 @@ import welcome from '../components/welcome.vue'
 import ShowInfo from '../components/ShowInfo.vue'
 import subjectImport from '../components/subjectImport.vue'
 import generattest from '../components/generattest.vue'
+import looktest from '../components/looktest.vue'
 import exporttest from '../components/exporttest.vue'
 
 Vue.use(Router)
@@ -34,6 +35,9 @@ export default new Router({
                     component: generattest
                 }, {
                     path: '/5',
+                    component: looktest
+                }, {
+                    path: '/6',
                     component: exporttest
                 }
             ]

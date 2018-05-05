@@ -23,7 +23,7 @@
       return {
         logining: false,
         ruleForm2: {
-          account: 'admin',
+          account: '2014012626',
           checkPass: '123456'
         },
         rules2: {
@@ -47,55 +47,16 @@
         var _this = this;
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
-            //_this.$router.replace('/table');
+            let loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
             this.logining = true;
             NProgress.start();
             setTimeout(() => {
+                sessionStorage.clear()
+                sessionStorage.setItem('userInfo', JSON.stringify(loginParams));
                 _this.logining = false;
                 NProgress.done();
                  _this.$router.push({ path: '/Home' });
             }, 1000);
-
-            
-            var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
-
-
-
-            // requestLogin(loginParams).then(data => {
-            //   this.logining = false;
-            //   NProgress.done();
-            //   let { msg, code, user } = data;
-            //   if (code !== 200) {
-            //     this.$message({
-            //       message: msg,
-            //       type: 'error'
-            //     });
-            //   } else {
-            //       sessionStorage.setItem('user', JSON.stringify(user));
-            //     this.$router.push({ path: '/page1' });
-            //   }
-            // });
-
-
-
-            // _this.axios.get('http://localhost:8080/getDiffNumbers')
-            // .then ( res => {
-            //     _this.logining = false;
-            //     NProgress.done();
-            //     let { msg, code, user } = data;
-            //     if (code !== 200) {
-            //         _this.$message({
-            //         message: msg,
-            //         type: 'error'
-            //         });
-            //     } else {
-            //         sessionStorage.setItem('user', JSON.stringify(user));
-            //         _this.$router.push({ path: '/page1' });
-            //     }
-            // })
-            // .catch( res => {
-            //     console.log('error');
-            // })
           } else {
             console.log('error submit!!');
             return false;
