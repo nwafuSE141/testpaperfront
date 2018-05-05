@@ -7,7 +7,7 @@
                 </el-table-column>
                 <el-table-column prop="name" label="试卷名字" width="300" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="createTime.time" label="创建时间" width="300" align="center" show-overflow-tooltip>
+                <el-table-column prop="createTimeFormat" label="创建时间" width="300" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column label="操作" width="150" align="center">
                     <template slot-scope="scope">
