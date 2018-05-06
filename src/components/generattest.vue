@@ -161,6 +161,10 @@
                 resObj.fillblank = this.fillblank.map(v => Number(v))
                 resObj.tureorfalse = this.tureorfalse.map(v => Number(v))
                 resObj.quesAndAns = this.quesAndAns.map(v => Number(v))
+                if(this.input.length == 0){
+                    this.$message.error('试卷题目不能为空');
+                    return false
+                }
                 if(this.singleSelect.length != 3){
                     this.$message.error('单项选择题数目必须为3！');
                     return false
@@ -173,6 +177,9 @@
                     this.axios.post('http://172.19.12.23:8888/paperorganize/addpaper', resObj)
                     .then(res => {
                         console.log(res)
+                        if(res.data.stat == 'no'){
+                            this.$message.error(res.data.msg);
+                        }
                         this.loading = false;
                     })
                     .catch(res => {
