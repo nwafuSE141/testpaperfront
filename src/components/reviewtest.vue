@@ -11,9 +11,11 @@
                 </el-table-column>
                 <el-table-column prop="status" label="状态" width="300" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column label="操作" width="150" align="center">
+                <el-table-column label="操作" width="300" align="center">
                     <template slot-scope="scope">
-                                    <el-button  size="mini" type="success" @click="viewDetail(scope.row)"><i class="el-icon-view"></i></el-button>
+                                    <el-button  size="mini" type="success" @click="viewDetail(scope.row)"><i class="el-icon-view"></i>查看</el-button>
+                                    <el-button  size="mini" type="primary" @click="approve(scope.row)"><i class="el-icon-check"></i>通过</el-button>
+                                    <el-button  size="mini" type="warning" @click="auditnotpassed(scope.row)"><i class="el-icon-close"></i>驳回</el-button>
 </template>
             </el-table-column>              
         </el-table>
@@ -154,7 +156,7 @@
                 let params = new URLSearchParams();
                 params.append("userId", Number(this.userInfo.username));
                 this.axios
-                    .post("http://172.19.12.23:8888/paper/getpaperwithuserid", params)
+                    .post("http://172.19.12.23:8888/paper/getalltestpaper", params)
                     .then(res => {
                         this.tableData = res.data.data;
                         this.loading = false;
@@ -163,6 +165,38 @@
                         this.loading = false;
                         console.log("error");
                     });
+            },
+            approve(row) {
+                this.curRow = row
+                let params = new URLSearchParams();
+                params.append("paperId", row.id);
+                this.axios.post('http://172.19.12.23:8888/paper/approve', params)
+                    .then(res => {
+                        this.loading = false;
+                        this.$message.success(res.data.msg);
+                        this.getPaperList();
+                    })
+                    .catch(res => {
+                        this.loading = false;
+                        console.log("error");
+                    })
+            
+            },
+            auditnotpassed(row) {
+                this.curRow = row
+                let params = new URLSearchParams();
+                params.append("paperId", row.id);
+                this.axios.post('http://172.19.12.23:8888/paper/auditnotpassed', params)
+                    .then(res => {
+                        this.loading = false;
+                        this.$message.success(res.data.msg);
+                        this.getPaperList();
+                    })
+                    .catch(res => {
+                        this.loading = false;
+                        console.log("error");
+                    })
+            
             }
         },
         mounted() {

@@ -147,7 +147,7 @@
         data () {
             return {
                 currentPage:1,
-                count:400,
+                count:20,
                 currentLimit:20,
                 searchContent:"",
                 multipleSelection: [],

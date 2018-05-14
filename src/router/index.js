@@ -7,6 +7,7 @@ import ShowInfo from '../components/ShowInfo.vue'
 import subjectImport from '../components/subjectImport.vue'
 import generattest from '../components/generattest.vue'
 import looktest from '../components/looktest.vue'
+import reviewtest from '../components/reviewtest.vue'
 import exporttest from '../components/exporttest.vue'
 
 Vue.use(Router)
@@ -38,6 +39,9 @@ export default new Router({
                     component: looktest
                 }, {
                     path: '/6',
+                    component: reviewtest
+                },{
+                    path: '/7',
                     component: exporttest
                 }
             ]

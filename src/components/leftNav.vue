@@ -33,6 +33,10 @@
       </el-menu-item>
       <el-menu-item index="6">
         <i class="el-icon-menu"></i>
+        <span slot="title">审阅试卷</span>
+      </el-menu-item>
+      <el-menu-item index="7">
+        <i class="el-icon-menu"></i>
         <span slot="title">导出试卷</span>
       </el-menu-item>
     </el-menu>

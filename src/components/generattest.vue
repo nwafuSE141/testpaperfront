@@ -89,7 +89,7 @@
                 userInfo: {},
                 type: '10001',
                 currentPage: 1,
-                count: 400,
+                count: 20,
                 tableData: [],
                 loading: true,
                 activeName: 'first', //标签页当前激活位置
