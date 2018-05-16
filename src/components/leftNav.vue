@@ -28,11 +28,11 @@
           <span slot="title">组合试卷</span>
       </el-menu-item>
       <el-menu-item index="5">
-        <i class="el-icon-menu"></i>
+        <i class="el-icon-view"></i>
         <span slot="title">查看试卷</span>
       </el-menu-item>
       <el-menu-item index="6">
-        <i class="el-icon-menu"></i>
+        <i class="el-icon-edit-outline"></i>
         <span slot="title">审阅试卷</span>
       </el-menu-item>
       <el-menu-item index="7">
