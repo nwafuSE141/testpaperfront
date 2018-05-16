@@ -5,11 +5,13 @@
             <el-table :data="tableData" border stripe v-loading="loading" style="width: 100%;margin-top:10px" max-height="449" highlight-current-row :cell-style="styleFunc">
                 <el-table-column prop="id" label="ID" width="60" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="name" label="试卷名字" width="300" align="center" show-overflow-tooltip>
+                <el-table-column prop="name" label="试卷名字" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="createTimeFormat" label="创建时间" width="300" align="center" show-overflow-tooltip>
+                <el-table-column prop="creator" label="创建人" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="status" label="状态" width="300" align="center" show-overflow-tooltip>
+                <el-table-column prop="createTimeFormat" label="创建时间" width="150" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="status" label="状态" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column label="操作" width="300" align="center">
                     <template slot-scope="scope">
@@ -103,6 +105,8 @@
 </template>
 
 <script>
+import bus from './BUS.vue'
+
     export default {
         data() {
             return {
@@ -141,7 +145,7 @@
                 this.curRow = row
                 let params = new URLSearchParams();
                 params.append("paperId", row.id);
-                this.axios.post('http://172.19.12.23:8888/paperinfo/getpapercompleteinfo', params)
+                this.axios.post('http://localhost:8888/paperinfo/getpapercompleteinfo', params)
                     .then(res => {
                         this.paperInfo = res.data.data;
                         this.loading = false;
@@ -154,9 +158,9 @@
             },
             getPaperList() {
                 let params = new URLSearchParams();
-                params.append("userId", Number(this.userInfo.username));
+                params.append("stat", 2);
                 this.axios
-                    .post("http://172.19.12.23:8888/paper/getalltestpaper", params)
+                    .post("http://localhost:8888/paper/gettestpaperwithstat", params)
                     .then(res => {
                         this.tableData = res.data.data;
                         this.loading = false;
@@ -167,10 +171,13 @@
                     });
             },
             approve(row) {
+                bus.$emit('needids', true);
+
                 this.curRow = row
                 let params = new URLSearchParams();
                 params.append("paperId", row.id);
-                this.axios.post('http://172.19.12.23:8888/paper/approve', params)
+                params.append("userId", Number(this.userInfo.username))
+                this.axios.post('http://localhost:8888/paper/approve', params)
                     .then(res => {
                         this.loading = false;
                         this.$message.success(res.data.msg);
@@ -183,10 +190,13 @@
             
             },
             auditnotpassed(row) {
+                bus.$emit('needids', true);
+                
                 this.curRow = row
                 let params = new URLSearchParams();
                 params.append("paperId", row.id);
-                this.axios.post('http://172.19.12.23:8888/paper/auditnotpassed', params)
+                params.append("userId", Number(this.userInfo.username))
+                this.axios.post('http://localhost:8888/paper/auditnotpassed', params)
                     .then(res => {
                         this.loading = false;
                         this.$message.success(res.data.msg);

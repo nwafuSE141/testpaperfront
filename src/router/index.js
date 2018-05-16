@@ -9,6 +9,7 @@ import generattest from '../components/generattest.vue'
 import looktest from '../components/looktest.vue'
 import reviewtest from '../components/reviewtest.vue'
 import exporttest from '../components/exporttest.vue'
+import edit from '../components/edit.vue'
 
 Vue.use(Router)
 
@@ -43,6 +44,9 @@ export default new Router({
                 },{
                     path: '/7',
                     component: exporttest
+                },{
+                    path: '/edit',
+                    component: edit
                 }
             ]
         }

@@ -5,19 +5,23 @@
             <el-table :data="tableData" border stripe v-loading="loading" style="width: 100%;margin-top:10px" max-height="449" highlight-current-row :cell-style="styleFunc">
                 <el-table-column prop="id" label="ID" width="60" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="name" label="试卷名字" width="300" align="center" show-overflow-tooltip>
+                <el-table-column prop="name" label="试卷名字" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="createTimeFormat" label="创建时间" width="300" align="center" show-overflow-tooltip>
+                <el-table-column prop="createTimeFormat" label="创建时间" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="status" label="状态" width="300" align="center" show-overflow-tooltip>
+                <el-table-column prop="status" label="状态" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column label="操作" width="150" align="center">
+                <el-table-column prop="reviewer" label="审核人" width="150" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column label="操作" width="400" align="center">
                     <template slot-scope="scope">
-                                    <el-button  size="mini" type="success" @click="viewDetail(scope.row)"><i class="el-icon-view"></i></el-button>
+                                    <el-button  size="mini" type="success" @click="viewDetail(scope.row)"><i class="el-icon-view"></i>查看</el-button>
+                                    <el-button  size="mini" type="primary" @click="submitreview(scope.row)"><i class="el-icon-plus"></i>提交审核</el-button>
+                                    <el-button  size="mini" type="info" @click="cancelreview(scope.row)"><i class="el-icon-minus"></i>撤销审核</el-button>
+                                    <!-- <el-button  size="mini" type="success" @click="editDetail(scope.row.id)"><i class="el-icon-view"></i>编辑</el-button> -->
 </template>
             </el-table-column>              
         </el-table>
-
          <!-- 分页 -->
         <div class="block">
             <el-pagination
@@ -139,7 +143,7 @@
                 this.curRow = row
                 let params = new URLSearchParams();
                 params.append("paperId", row.id);
-                this.axios.post('http://172.19.12.23:8888/paperinfo/getpapercompleteinfo', params)
+                this.axios.post('http://localhost:8888/paperinfo/getpapercompleteinfo', params)
                     .then(res => {
                         this.paperInfo = res.data.data;
                         this.loading = false;
@@ -150,11 +154,65 @@
                     })
                 this.dialogVisible = true
             },
+            editDetail(id) {
+                this.$router.push({
+                    path: '/edit',
+                    query: {
+                        id: id
+                    }
+                })
+            },
+            submitreview(row) {
+                this.curRow = row
+
+                if(row.state == 1 || row.state == 2){
+                    this.$message.error("试卷已" + row.status +",请重新检查");
+                    return;
+                }
+
+                let params = new URLSearchParams();
+                params.append("paperId", row.id);
+                this.axios.post('http://localhost:8888/paperorganize/submitreview', params)
+                    .then(res => {
+                        this.loading = false;
+                        this.$message.success(res.data.msg);
+                        this.getPaperList();
+                    })
+                    .catch(res => {
+                        this.loading = false;
+                        console.log("error");
+                    })
+            
+            },
+            
+            cancelreview(row) {
+                this.curRow = row
+
+                if(row.state != 2){
+                    this.$message.error("试卷已" + row.status +",请重新检查");
+                    return;
+                }
+
+                let params = new URLSearchParams();
+                params.append("paperId", row.id);
+                this.axios.post('http://localhost:8888/paperorganize/cancelreview', params)
+                    .then(res => {
+                        this.loading = false;
+                        this.$message.success(res.data.msg);
+                        this.getPaperList();
+                    })
+                    .catch(res => {
+                        this.loading = false;
+                        console.log("error");
+                    })
+            
+            },
+
             getPaperList() {
                 let params = new URLSearchParams();
                 params.append("userId", Number(this.userInfo.username));
                 this.axios
-                    .post("http://172.19.12.23:8888/paper/getpaperwithuserid", params)
+                    .post("http://localhost:8888/paper/getpaperwithuserid", params)
                     .then(res => {
                         this.tableData = res.data.data;
                         this.loading = false;

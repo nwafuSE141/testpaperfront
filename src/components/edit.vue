@@ -5,7 +5,7 @@
             <el-input v-model="input" placeholder="请输入试卷题目" style="width: 400px;"></el-input>
         </section>
         <section>
-            <h3 class="title">抽取非选题</h3>
+            <h3 class="title">抽取非选择题</h3>
             <el-select v-model="type" placeholder="请选择题型" class="select-type" @change="selectQuestionType">
                 <el-option label="单选题" value="10001" selected="selected"></el-option>
                 <el-option label="多选题" value="10002"></el-option>
@@ -36,7 +36,7 @@
         </el-table>
 
          <!-- 分页 -->
-        <!-- <div class="block">
+        <div class="block">
             <el-pagination
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage"
@@ -44,7 +44,7 @@
             layout="total, prev, pager, next"
             :total="count">
             </el-pagination>
-        </div> -->
+        </div>
         </section>
         <hr>
         <h3 class="title">已选题目：</h3>
@@ -98,12 +98,26 @@
                 multipleSelect: '', //简答题
                 fillblank: '', //求解题
                 tureorfalse: '', //设计题
-                quesAndAns: '' //应用题
+                quesAndAns: '', //应用题
+                paperid: ''
             }
         },
         methods: {
             selectQuestionType(v) {
                 this.type = v
+            },
+            getpaperinfo(paperid) {
+                let params = new URLSearchParams();
+                params.append("paperId", paperid);
+                this.axios.post('http://localhost:8888/paperinfo/getpapercompleteinfo', params)
+                    .then(res => {
+                        this.paperInfo = res.data.data;
+                        console.log(this.paperInfo);
+                    })
+                    .catch(res => {
+                        this.loading = false;
+                        console.log("error");
+                    })
             },
             getQuestionHandle() {
                 let params = new URLSearchParams();
@@ -176,12 +190,10 @@
                 this.$nextTick(function() {
                     this.axios.post('http://172.19.12.23:8888/paperorganize/addpaper', resObj)
                     .then(res => {
-                        console.log(res.data.stat)
-                        if(res.data.stat === 'no'){
+                        console.log(res)
+                        if(res.data.stat == 'no'){
                             this.$message.error(res.data.msg);
-                            return
                         }
-                        this.$message.success(res.data.msg);
                         this.loading = false;
                     })
                     .catch(res => {
@@ -200,6 +212,7 @@
             selectproject5,
         },
         mounted() {
+            this.paperid = this.$route.query.id
             this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
             //默认请求第一类数据
             this.getQuestionHandle()
@@ -219,6 +232,8 @@
             bus.$on('id5', data => {
                 this.quesAndAns = data;
             });
+
+            this.getpaperinfo(this.paperid);
         },
         watch: {
             // 如果 `question` 类型发生改变，这个函数就会运行
@@ -226,6 +241,7 @@
                 this.getQuestionHandle()
             }
         },
+
     }
 </script>
 
