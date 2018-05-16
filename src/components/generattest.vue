@@ -30,7 +30,7 @@
                 </el-table-column>
                 <el-table-column label="操作" width="150" align="center">
                     <template slot-scope="scope">
-                                <el-button  size="mini" type="success" @click="selectItem(scope.row)"><i class="el-icon-plus"></i></el-button>
+                                <el-button  size="mini" type="success" @click="selectItem(scope.row)">使用</el-button>
 </template>
             </el-table-column>              
         </el-table>
@@ -153,42 +153,51 @@
                 }
             },
             productProtect() { //生成试卷
-                bus.$emit('needids', true);
-                let resObj = {'userid': Number(this.userInfo.username)}
-                resObj.name = this.input
-                resObj.singleSelect = this.singleSelect.map(v => Number(v))
-                resObj.multipleSelect = this.multipleSelect.map(v => Number(v))
-                resObj.fillblank = this.fillblank.map(v => Number(v))
-                resObj.tureorfalse = this.tureorfalse.map(v => Number(v))
-                resObj.quesAndAns = this.quesAndAns.map(v => Number(v))
-                if(this.input.length == 0){
-                    this.$message.error('试卷题目不能为空');
-                    return false
-                }
-                if(this.singleSelect.length != 3){
-                    this.$message.error('单项选择题数目必须为3！');
-                    return false
-                }
-                if(this.multipleSelect.length == 0 || this.fillblank.length == 0 || this.tureorfalse.length == 0 || this.quesAndAns == 0){
-                    this.$message.error('所有题型不能为空');
-                    return false
-                }
-                this.$nextTick(function() {
-                    this.axios.post('http://172.19.12.23:8888/paperorganize/addpaper', resObj)
-                    .then(res => {
-                        console.log(res.data.stat)
-                        if(res.data.stat === 'no'){
-                            this.$message.error(res.data.msg);
-                            return
+                this.$confirm('确定不需要再检查试卷吗, 是否继续?', '提示',{
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+
+                        bus.$emit('needids', true);
+                        let resObj = {'userid': Number(this.userInfo.username)}
+                        resObj.name = this.input
+                        resObj.singleSelect = this.singleSelect.map(v => Number(v))
+                        resObj.multipleSelect = this.multipleSelect.map(v => Number(v))
+                        resObj.fillblank = this.fillblank.map(v => Number(v))
+                        resObj.tureorfalse = this.tureorfalse.map(v => Number(v))
+                        resObj.quesAndAns = this.quesAndAns.map(v => Number(v))
+                        if(this.input.length == 0){
+                            this.$confirm('试卷题目不能为空')
+                            return false
                         }
-                        this.$message.success(res.data.msg);
-                        this.loading = false;
-                    })
-                    .catch(res => {
-                        this.loading = false;
-                        console.log("error");
-                    })
-                })
+                        if(this.singleSelect.length != 3){
+                            this.$confirm('单项选择题数目必须为3！')
+                            return false
+                        }
+                        if(this.multipleSelect.length == 0 || this.fillblank.length == 0 || this.tureorfalse.length == 0 || this.quesAndAns == 0){
+                            this.$confirm('所有题型不能为空')
+                            return false
+                        }
+                        this.$nextTick(function() {
+                            this.axios.post('http://172.19.12.23:8888/paperorganize/addpaper', resObj)
+                            .then(res => {
+                                console.log(res.data.stat)
+                                if(res.data.stat === 'no'){
+                                    this.$message.error(res.data.msg);
+                                    return
+                                }
+                                this.$message.success(res.data.msg);
+                                this.loading = false;
+                            })
+                            .catch(res => {
+                                this.loading = false;
+                                console.log("error");
+                            })
+                        })
+                }).catch(() => {    
+                });
+
             }
         },
         components: {

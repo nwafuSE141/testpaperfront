@@ -171,42 +171,56 @@ import bus from './BUS.vue'
                     });
             },
             approve(row) {
-                bus.$emit('needids', true);
+                this.$confirm('确定通过《'+ row.name +'》试卷吗, 是否继续?', '提示',{
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
 
-                this.curRow = row
-                let params = new URLSearchParams();
-                params.append("paperId", row.id);
-                params.append("userId", Number(this.userInfo.username))
-                this.axios.post('http://localhost:8888/paper/approve', params)
-                    .then(res => {
-                        this.loading = false;
-                        this.$message.success(res.data.msg);
-                        this.getPaperList();
-                    })
-                    .catch(res => {
-                        this.loading = false;
-                        console.log("error");
-                    })
-            
+                        bus.$emit('needids', true);
+
+                        this.curRow = row
+                        let params = new URLSearchParams();
+                        params.append("paperId", row.id);
+                        params.append("userId", Number(this.userInfo.username))
+                        this.axios.post('http://localhost:8888/paper/approve', params)
+                            .then(res => {
+                                this.loading = false;
+                                this.$message.success(res.data.msg);
+                                this.getPaperList();
+                            })
+                            .catch(res => {
+                                this.loading = false;
+                                console.log("error");
+                            })
+
+                }).catch(() => {    
+                });
             },
             auditnotpassed(row) {
-                bus.$emit('needids', true);
-                
-                this.curRow = row
-                let params = new URLSearchParams();
-                params.append("paperId", row.id);
-                params.append("userId", Number(this.userInfo.username))
-                this.axios.post('http://localhost:8888/paper/auditnotpassed', params)
-                    .then(res => {
-                        this.loading = false;
-                        this.$message.success(res.data.msg);
-                        this.getPaperList();
-                    })
-                    .catch(res => {
-                        this.loading = false;
-                        console.log("error");
-                    })
-            
+                this.$confirm('确定驳回《'+row.name+'》试卷吗, 是否继续?', '提示',{
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                        bus.$emit('needids', true);
+                        
+                        this.curRow = row
+                        let params = new URLSearchParams();
+                        params.append("paperId", row.id);
+                        params.append("userId", Number(this.userInfo.username))
+                        this.axios.post('http://localhost:8888/paper/auditnotpassed', params)
+                            .then(res => {
+                                this.loading = false;
+                                this.$message.success(res.data.msg);
+                                this.getPaperList();
+                            })
+                            .catch(res => {
+                                this.loading = false;
+                                console.log("error");
+                            })
+                 }).catch(() => {    
+                });
             }
         },
         mounted() {

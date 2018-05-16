@@ -163,48 +163,62 @@
                 })
             },
             submitreview(row) {
-                this.curRow = row
+                this.$confirm('《'+row.name+'》确定不需要再检查试卷吗, 是否继续?', '提示',{
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                        this.curRow = row
 
-                if(row.state == 1 || row.state == 2){
-                    this.$message.error("试卷已" + row.status +",请重新检查");
-                    return;
-                }
+                        if(row.state == 1 || row.state == 2){
+                            this.$confirm("试卷已" + row.status +",请重新检查")
+                            return;
+                        }
 
-                let params = new URLSearchParams();
-                params.append("paperId", row.id);
-                this.axios.post('http://localhost:8888/paperorganize/submitreview', params)
-                    .then(res => {
-                        this.loading = false;
-                        this.$message.success(res.data.msg);
-                        this.getPaperList();
-                    })
-                    .catch(res => {
-                        this.loading = false;
-                        console.log("error");
-                    })
+                        let params = new URLSearchParams();
+                        params.append("paperId", row.id);
+                        this.axios.post('http://localhost:8888/paperorganize/submitreview', params)
+                            .then(res => {
+                                this.loading = false;
+                                this.$message.success(res.data.msg);
+                                this.getPaperList();
+                            })
+                            .catch(res => {
+                                this.loading = false;
+                                console.log("error");
+                            })
+                }).catch(() => {    
+                });
             
             },
             
             cancelreview(row) {
-                this.curRow = row
+                this.$confirm('《'+row.name+'》确定不再等待审核了吗, 是否继续?', '提示',{
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                        this.curRow = row
 
-                if(row.state != 2){
-                    this.$message.error("试卷已" + row.status +",请重新检查");
-                    return;
-                }
+                        if(row.state != 2){
+                            this.$confirm(row.name+"试卷已" + row.status +",请重新检查")
+                            return;
+                        }
 
-                let params = new URLSearchParams();
-                params.append("paperId", row.id);
-                this.axios.post('http://localhost:8888/paperorganize/cancelreview', params)
-                    .then(res => {
-                        this.loading = false;
-                        this.$message.success(res.data.msg);
-                        this.getPaperList();
-                    })
-                    .catch(res => {
-                        this.loading = false;
-                        console.log("error");
-                    })
+                        let params = new URLSearchParams();
+                        params.append("paperId", row.id);
+                        this.axios.post('http://localhost:8888/paperorganize/cancelreview', params)
+                            .then(res => {
+                                this.loading = false;
+                                this.$message.success(res.data.msg);
+                                this.getPaperList();
+                            })
+                            .catch(res => {
+                                this.loading = false;
+                                console.log("error");
+                            })
+                }).catch(() => {    
+                });
             
             },
 
