@@ -7,65 +7,23 @@
                 </el-form-item>
                 <el-form-item>
                     <h3>难易等级</h3>
-                    <el-input v-model="form.level"></el-input>
+                    <el-input v-model="form.difficult"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <h3>所属章节</h3>
-                    <el-input v-model="form.chapter"></el-input>
+                    <el-input v-model="form.courseId"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <h3>考察知识点</h3>
+                    <el-input v-model="form.pointId"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <h3>问题描述</h3>
                     <el-input type="textarea" v-model="form.question"></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="handleClearQuestionImg">删除图片</el-button>
-                    <h3>问题相关图片</h3>
-                    <div class="imgshow" v-show="showImg" ref="questionimgdiv">
-                    </div>
-                    <span v-show="showTip" class="tip">无相关图片</span>
-                    <div>
-                        <el-upload
-                        class="upload"
-                        action="http://172.20.10.14:8080/updateQuestions"
-                        ref="upload"
-                        :file-list="question_fileList"
-                        :auto-upload="false"
-                        :on-change="handleQuestionChange"
-                        :on-remove="handleQuestionImgRemove"
-                        list-type="picture">
-                        <el-button size="small" type="primary">重新上传</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                        </el-upload>
-                    </div>
-                </el-form-item>
                 <el-form-item >
                     <h3>答案</h3>
                     <el-input type="textarea" v-model="form.answer"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="handleClearAnswerImg">删除图片</el-button>
-                    <h3>答案相关图片</h3>
-                    <div class="imgshow" v-show="showImg"  ref="answerimgdiv">
-                    </div>
-                    <span v-show="showTip" class="tip">无相关图片</span>
-                    <div>
-                        <el-upload
-                        class="upload"
-                        action="http://172.20.10.14:8080/updateQuestionss"
-                        ref="upload"
-                        :file-list="answer_fileList"
-                        :auto-upload="false"
-                        :on-change="handleAnswerChange"
-                        :on-remove="handleAnswerImgRemove"
-                        list-type="picture">
-                            <el-button size="small" type="primary">点击上传</el-button>
-                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                        </el-upload>
-                    </div>
-                </el-form-item>
-                <el-form-item>
-                    <h3>备注</h3>
-                    <el-input type="textarea" v-model="form.additional"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -122,7 +80,7 @@
                 if (formData != '' && !(formData == 'null')) {
                     this.showImg = true;
                     this.showTip = false;
-                    var arr = formData.split(','); 
+                    var arr = formData.split(',');
                     if (arr[0] === " ") {
                         this.appendImg(arr[1],'answerimgdiv');
                     } else if (arr[1] === " ") {
@@ -206,7 +164,7 @@
                     this.$nextTick(function () {
                         this.$refs[divType].appendChild(myimg);
                     })
-                }     
+                }
             },
             handleQuestionChange (file,fileList) { //问题图片处理方法
                 this.handleImgChange('questionImgCounter','questionImgNameAry','question_','questionImg',file);
@@ -263,7 +221,7 @@
                 for (let i = 0; i < this[imgNameArr].length; i ++) {
                     if (this[imgNameArr][i].indexOf(imgName) > -1) {
                         this[imgNameArr].splice(i,1);
-                    } 
+                    }
                 }
             },
             //问题图片移除触发事件
@@ -289,11 +247,11 @@
         },
         mounted() {    //在组件的钩子函数中监听事件
             bus.$on('edit', data => {   //获取值
-                this.dialogFormEditVisible = data.flag; 
+                this.dialogFormEditVisible = data.flag;
                 data.value.questionImg = {};
                 data.value.answerImg = {};
                 this.form = data.value;
-                this.type = data.region; 
+                this.type = data.region;
                 this.handleImgs();
             })
         }

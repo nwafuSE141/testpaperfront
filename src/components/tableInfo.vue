@@ -12,9 +12,6 @@
                         </el-form-item>
                     </el-form>
                 </div>
-                <div class="right">
-                    <el-button type="primary" icon="el-icon-document">复制到剪切板</el-button>
-                </div>
                 <div class="clearfix"></div>
             </div>
             <div class="clearfix"></div>
@@ -23,10 +20,6 @@
                 <div class="left">
                     <el-button type="danger" icon="el-icon-delete" @click="batchDel">批量删除</el-button>
                     <el-button icon="el-icon-plus" type="primary" @click="handerAddSubject">添加题目</el-button>
-                </div>
-                <div class="right">
-                    <el-button type="primary" icon="el-icon-sold-out">导出csv</el-button>
-                    <el-button type="primary" id="btnprint" icon="el-icon-printer">打印</el-button>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -37,10 +30,10 @@
             <span>题型：</span>
             <el-select v-model="region" placeholder="请选择题型">
                 <el-option label="单项选择题" value="0"></el-option>
-                <el-option label="简答题" value="1"></el-option>
-                <el-option label="求解题" value="2"></el-option>
-                <el-option label="设计题" value="3"></el-option>
-                <el-option label="应用题" value="4"></el-option>
+                <el-option label="多项选择题" value="1"></el-option>
+                <el-option label="填空题" value="2"></el-option>
+                <el-option label="判断题" value="3"></el-option>
+                <el-option label="问答题" value="4"></el-option>
             </el-select>
         </div>
 
@@ -66,18 +59,25 @@
             show-overflow-tooltip>
             </el-table-column>
             <el-table-column
-            prop="level"
+            prop="difficult"
             label="难易等级"
             width="78"
             align="center"
             show-overflow-tooltip>
             </el-table-column>
             <el-table-column
-            prop="chapter"
-            label="所属章节"
-            width="83"
-            align="center"
-            show-overflow-tooltip>
+              prop="courseId"
+              label="章节"
+              width="83"
+              align="center"
+              show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column
+              prop="pointId"
+              label="知识点"
+              width="83"
+              align="center"
+              show-overflow-tooltip>
             </el-table-column>
             <el-table-column
             prop="question"
@@ -94,16 +94,9 @@
             show-overflow-tooltip>
             </el-table-column>
             <el-table-column
-            prop="imgName"
-            label="图片"
-            width="90"
-            align="center"
-            show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column
-            prop="additional"
-            label="备注"
-            width="138"
+            prop="faq"
+            label="解析"
+            width="180"
             align="center"
             show-overflow-tooltip>
             </el-table-column>
@@ -122,7 +115,7 @@
                         <el-button  size="mini" type="danger" @click="handleDel(scope.row.id)"><i class="el-icon-delete"></i></el-button>
                     </el-tooltip>
                 </template>
-            </el-table-column>              
+            </el-table-column>
         </el-table>
 
         <!-- 分页 -->
@@ -217,7 +210,7 @@
                                 this.loading = false;
                                 this.tableData = [];
                                 this.tableData = res.data.data;
-                                this.count = res.data.count; 
+                                this.count = res.data.count;
                             })
                             .catch( res => {
                                 this.loading = false;
@@ -228,7 +221,7 @@
                             this.loading = false;
                             this.$message.error('删除失败！');
                         })
-                }).catch(() => {    
+                }).catch(() => {
                 });
             },
             handerAddSubject() {  //添加一条题目
@@ -332,7 +325,7 @@
                     return false;
                 } else {
                     for ( var i = 0 ; i < count; i ++) {//将需要删除的id凭借为字符串发往服务器
-                        str += delTarget[i].id + ",";  
+                        str += delTarget[i].id + ",";
                     }
                     this.$confirm('此操作将永久删除这些题目, 是否继续?', '提示',{
                         confirmButtonText: '确定',
@@ -359,7 +352,7 @@
                                     this.loading = false;
                                     this.tableData = [];
                                     this.tableData = res.data.data;
-                                    this.count = res.data.count; 
+                                    this.count = res.data.count;
                                 })
                                 .catch( res => {
                                     this.loading = false;
@@ -376,19 +369,19 @@
             }
         },
         mounted(){ //加载页面时默认请求第一类型数据
-            this.axios.get('http://localhost:8080/getQuestions',{
+            this.axios.get('http://localhost:8888/item/0',{
                 params: {
                     page: this.currentPage,
                     limit:this.currentLimit,
-                    type:this.region
+                    type: 1
                 }
             })
             .then( res => {
-                this.loading = false;
-                if (res.data.count != 0) {
-                    this.tableData = res.data.data;
-                    this.count = res.data.count; 
-                }
+//                this.loading = false;
+//                if (res.data.count != 0) {
+                    this.tableData = res.data.body;
+                    console.log(res.data.body);
+//                }
             })
             .catch( res => {
                 this.loading = false;
@@ -407,7 +400,7 @@
                 })
                 .then( res => {
                     target.tableData = res.data.data;
-                    target.count = res.data.count; 
+                    target.count = res.data.count;
                 })
                 .catch( res => {
                     console.log("error");
@@ -418,17 +411,18 @@
             region: function (newValue) {
                 this.loading = true;
                 this.currentPage = 1;
-                this.axios.get('http://localhost:8080/getQuestions',{
+                this.axios.get('http://localhost:8888/item/'+ newValue,{
                     params: {
-                        page: this.currentPage,
-                        limit:this.currentLimit,
-                        type:newValue
+//                        page: this.currentPage,
+//                        limit:this.currentLimit,
                     }
                 })
                 .then( res => {
-                this.loading = false;
-                    this.tableData = res.data.data;
-                    this.count = res.data.count; 
+                    this.loading = false;
+                    this.tableData = res.data.body;
+//                    this.count = res.data.count;
+                    console.log(res.data.body);
+                    console.log(newValue)
                 })
                 .catch( res => {
                 this.loading = false;
@@ -440,7 +434,7 @@
 </script>
 
 <style scoped>
-        
+
     .myaction {
         margin-top: 15px;
     }

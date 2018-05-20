@@ -7,7 +7,7 @@
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b">
-        <div id="title">
+        <div id="title">简单版本
             组卷系统
         </div>
 
@@ -51,7 +51,7 @@
        color: #fff;
        margin-left: 30px;
    }
-   
+
    #notice{
        float: right;
        margin-right: 60px;
