@@ -6,7 +6,7 @@
                     <el-input v-model="form.difficult" disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <h3>所属章节</h3>
+                    <h3>课程号</h3>
                     <el-input v-model="form.courseId" disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item>

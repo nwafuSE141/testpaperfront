@@ -67,7 +67,7 @@
             </el-table-column>
             <el-table-column
               prop="courseId"
-              label="章节"
+              label="课程号"
               width="83"
               align="center"
               show-overflow-tooltip>
@@ -159,7 +159,7 @@
                 }else{
                     this.loading = true;
                     this.isSerach = true;
-                    this.axios.get('http://localhost:8080/searchQuestions',{
+                    this.axios.get('http://localhost:8888/item/searchBySection',{
                         params: {
                             page:this.currentPage,
                             limit:this.currentLimit,
@@ -378,10 +378,11 @@
             })
             .then( res => {
 //                this.loading = false;
-//                if (res.data.count != 0) {
+              console.log(res.data.code);
+              if (res.data.code === 200) {
                     this.tableData = res.data.body;
                     console.log(res.data.body);
-//                }
+                }
             })
             .catch( res => {
                 this.loading = false;

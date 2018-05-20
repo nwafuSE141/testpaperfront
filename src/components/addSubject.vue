@@ -1,50 +1,32 @@
 <template>
   <el-dialog title="增加题目" :visible.sync="dialogFormAddSubjectVisible"  :show-close="false">
             <el-form :model="form">
-                <el-form-item label="难易等级">
-                    <el-input v-model="form.level"></el-input>
+                <el-form-item label="选择题型">
+                <el-select v-model="form.type" placeholder="请选择题型">
+                    <el-option label="单项选择题" value="0"></el-option>
+                    <el-option label="多项选择题" value="1"></el-option>
+                    <el-option label="填空题" value="2"></el-option>
+                    <el-option label="判断题" value="3"></el-option>
+                    <el-option label="问答题" value="4"></el-option>
+                  </el-select>
                 </el-form-item>
-                <el-form-item label="所属章节">
-                    <el-input v-model="form.chapter"></el-input>
+                <el-form-item label="难易等级">
+                    <el-input v-model="form.difficult"></el-input>
+                </el-form-item>
+                <el-form-item label="课程号">
+                    <el-input v-model="form.courseId"></el-input>
+                </el-form-item>
+                <el-form-item label="考察知识点">
+                    <el-input v-model="form.pointId"></el-input>
                 </el-form-item>
                 <el-form-item label="问题描述">
                     <el-input type="textarea" v-model="form.question"></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <h3>题目相关图片</h3>
-                    <el-upload
-                    class="upload"
-                    action="/addQuestions"
-                    ref="upload"
-                    :file-list="question_fileList"
-                    :auto-upload="false"
-                    :on-change="handleQuestionChange"
-                    :on-remove="handleQuestionImgRemove"
-                    list-type="picture">
-                        <el-button size="small" type="primary">点击上传</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-                </el-form-item>
                 <el-form-item label="答案">
                     <el-input type="textarea" v-model="form.answer"></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <h3>答案相关图片</h3>
-                    <el-upload
-                    class="upload"
-                    action="/addQuestions"
-                    ref="upload"
-                    :file-list="answer_fileList"
-                    :auto-upload="false"
-                    :on-change="handleAnswerChange"
-                    :on-remove="handleAnswerImgRemove"
-                    list-type="picture">
-                        <el-button size="small" type="primary">点击上传</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="备注">
-                    <el-input type="textarea" v-model="form.additional"></el-input>
+                <el-form-item label="解析">
+                  <el-input type="textarea" v-model="form.faq"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -62,11 +44,13 @@
         data () {
            return {
                 form:{
-                    level:'',
-                    chapter:'',
+                    type:'',
+                    difficult:'',
+                    courseId:'',
                     question:'',
-                    imgName:'',
+                    pointId:'',
                     answer:'',
+                    faq:'',
                     additional:'',
                     questionImg:{},
                     answerImg:{}
@@ -74,7 +58,6 @@
                 dialogFormAddSubjectVisible: false,
                 question_fileList:[],
                 answer_fileList:[],
-                type:'',
                 isLast:false,
                 questionImgCounter:0,
                 answerImgCounter:0,
@@ -95,15 +78,17 @@
                     text:'题目上传中...'
                 });
                 var params = new URLSearchParams();
-                params.append('type',this.type);
-                params.append('level',this.form.level);
-                params.append('chapter',this.form.chapter);
+                params.append('type',this.form.type);
+                params.append('difficult',this.form.difficult);
+                params.append('courseId',this.form.courseId);
+                params.append('pointId',this.form.pointId);
+                params.append('answer',this.form.answer);
                 params.append('question',this.form.question);
+                params.append('faq',this.form.faq);
                 var queLen = this.questionImgNameAry.length;
                 var ansLen = this.answerImgNameAry.length;
                 this.form.imgName = (queLen == 0 && ansLen == 0) ? "" : (queLen == 0 ? " " : this.questionImgNameAry.join('-')) + ',' + (ansLen == 0 ? " " : this.answerImgNameAry.join('-'));
                 params.append('imgName', this.form.imgName);
-                params.append('answer',this.form.answer);
                 params.append('additional',this.form.additional);
                 if (this.questionImgCounter > 0) {
                     for (let i = 1 ; i < this.questionImgCounter + 1; i ++) {
@@ -117,7 +102,7 @@
                     }
                     params.append('answerImgCounter',this.answerImgCounter);
                 }
-                this.axios.post('http://localhost:8080/addQuestions',params)
+                this.axios.post('http://localhost:8888/item/add',params)
                 .then( res => {
                     loadingInstance.close();
                     this.$message.success('添加成功！');
@@ -134,11 +119,11 @@
             handleClose () {
                 this.dialogFormAddSubjectVisible = false;
                   for (var index in this.form) {   //关闭弹框后把内容清空
-                        if (index == 'questionImg' || index == 'answerImg') {
+//                        if (index == 'questionImg' || index == 'answerImg') {
                             this.form[index] = {};
-                        } else {
+//                        } else {
                             this.form[index] = '';
-                        }
+//                        }
                     }
                     this.question_fileList = [];
                     this.answer_fileList = [];
@@ -204,7 +189,7 @@
                 for (let i = 0; i < this[imgNameArr].length; i ++) {
                     if (this[imgNameArr][i].indexOf(imgName) > -1) {
                         this[imgNameArr].splice(i,1);
-                    } 
+                    }
                 }
             },
 
