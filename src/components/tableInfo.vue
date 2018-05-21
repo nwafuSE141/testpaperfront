@@ -1,19 +1,19 @@
 <template>
     <div>
         <div class="myaction">
-            <div class="first">
-                <div class="left">
-                <el-form :inline="true" class="demo-form-inline">
-                        <el-form-item label="搜索内容" class="myelform">
-                            <el-input v-model="searchContent" placeholder="请输入搜索内容"></el-input>
-                        </el-form-item>
-                        <el-form-item  class="myelform">
-                            <el-button type="primary" @click="onSubmit" icon="el-icon-search">查询</el-button>
-                        </el-form-item>
-                    </el-form>
-                </div>
-                <div class="clearfix"></div>
-            </div>
+            <!--<div class="first">-->
+                <!--<div class="left">-->
+                <!--<el-form :inline="true" class="demo-form-inline">-->
+                        <!--<el-form-item label="搜索内容" class="myelform">-->
+                            <!--<el-input v-model="searchContent" placeholder="请输入搜索内容"></el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item  class="myelform">-->
+                            <!--<el-button type="primary" @click="onSubmit" icon="el-icon-search">查询</el-button>-->
+                        <!--</el-form-item>-->
+                    <!--</el-form>-->
+                <!--</div>-->
+                <!--<div class="clearfix"></div>-->
+            <!--</div>-->
             <div class="clearfix"></div>
 
             <div class="bottom">
@@ -153,32 +153,32 @@
             }
         },
         methods:{
-            onSubmit(){  //提交搜索内容
-                if ( this.searchContent == "") {
-                    this.$message.error('搜索内容不能为空！');
-                }else{
-                    this.loading = true;
-                    this.isSerach = true;
-                    this.axios.get('http://localhost:8888/item/searchBySection',{
-                        params: {
-                            page:this.currentPage,
-                            limit:this.currentLimit,
-                            data:this.searchContent
-                        }
-                    })
-                    .then( res => {
-                        this.loading = false;
-                        this.tableData = [];
-                        this.tableData = res.data.data;
-                        this.count = res.data.count;
-                        this.currentPage = 1;
-                    })
-                    .catch( res => {
-                        this.loading = false;
-                        console.log("error");
-                    })
-                }
-            },
+//            onSubmit(){  //提交搜索内容
+//                if ( this.searchContent == "") {
+//                    this.$message.error('搜索内容不能为空！');
+//                }else{
+//                    this.loading = true;
+//                    this.isSerach = true;
+//                    this.axios.get('http://localhost:8888/item/searchBySection',{
+//                        params: {
+//                            page:this.currentPage,
+//                            limit:this.currentLimit,
+//                            data:this.searchContent
+//                        }
+//                    })
+//                    .then( res => {
+//                        this.loading = false;
+//                        this.tableData = [];
+//                        this.tableData = res.data.data;
+//                        this.count = res.data.count;
+//                        this.currentPage = 1;
+//                    })
+//                    .catch( res => {
+//                        this.loading = false;
+//                        console.log("error");
+//                    })
+//                }
+//            },
             handleLook(param){  //点击查看时向lookinfo发送消息
                 bus.$emit("look", {flag:true,value:param});
             },
@@ -199,7 +199,7 @@
                         .then( res => {
                             this.$message.success('删除成功！');
                             //删除成功后重新请求当前页
-                            this.axios.get('http://localhost:8888/item/0',{
+                            this.axios.get('http://localhost:8888/item/' + this.region,{
                                 params: {
                                     page: this.currentPage,
                                     limit:this.currentLimit,
@@ -225,7 +225,7 @@
                 });
             },
             handerAddSubject() {  //添加一条题目
-                if ( this.currentPage == Math.ceil( this.count / this.currentLimit) ) //判断是否是最后一页
+                if ( this.currentPage === Math.ceil( this.count / this.currentLimit) ) //判断是否是最后一页
                     this.isLast = true;
                 bus.$emit("addSubject", {flag:true,type:this.region,isLast:this.isLast});
             },
@@ -233,7 +233,7 @@
                 this.loading = true;
                 this.currentLimit = val;
                 if (this.isSerach) {    //如果是搜索页
-                    this.axios.get('http://172.20.10.14:8080/searchQuestions',{
+                    this.axios.get('http://localhost:8888/item/' + this.region,{
                         params: {
                             page:this.currentPage,
                             limit:this.currentLimit,
@@ -243,7 +243,7 @@
                     .then( res => {
                         this.loading = false;
                         this.tableData = [];
-                        this.tableData = res.data.data;
+                        this.tableData = res.data.body;
                         this.count = res.data.count;
                         this.currentPage = 1;
                     })
@@ -252,7 +252,7 @@
                         console.log("error");
                     })
                 } else {   //平常页
-                    this.axios.get('http://localhost:8080/getQuestions',{
+                    this.axios.get('http://localhost:8888/item/' + this.region,{
                     params: {
                         page: this.currentPage,
                         limit:val,
@@ -260,8 +260,8 @@
                     }
                 })
                 .then( res => {
+                    this.tableData = res.data.body;
                     this.loading = false;
-                    this.tableData = res.data;
                     this.count = res.data.count;
                 })
                 .catch( res => {
@@ -369,7 +369,7 @@
             }
         },
         mounted(){ //加载页面时默认请求第一类型数据
-            this.axios.get('http://localhost:8888/item/0',{
+            this.axios.get('http://localhost:8888/item/' + this.region,{
                 params: {
                     page: this.currentPage,
                     limit:this.currentLimit,
