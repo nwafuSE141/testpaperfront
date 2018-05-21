@@ -195,11 +195,11 @@
                     var params = new URLSearchParams();
                         params.append("id",id);
                         params.append("type",this.region);
-                        this.axios.post('http://localhost:8080/deleteQuestions',params)
+                        this.axios.post('http://localhost:8888/item/delete',params)
                         .then( res => {
                             this.$message.success('删除成功！');
                             //删除成功后重新请求当前页
-                            this.axios.get('http://localhost:8080/getQuestions',{
+                            this.axios.get('http://localhost:8888/item/0',{
                                 params: {
                                     page: this.currentPage,
                                     limit:this.currentLimit,
@@ -334,14 +334,14 @@
                     }).then(() => {
                         this.loading = true;
                         var params = new URLSearchParams();
-                        params.append("data",str);
+                        params.append("ids",str);
                         params.append("type",this.region);
                         this.loading = true;
-                        this.axios.post('http://localhost:8080/bachDelete',params)
+                        this.axios.post('http://localhost:8888/item/batchDelete',params)
                         .then( res => {
                                 this.$message.success('删除成功！');
                                 //删除成功后其重新请求当前页
-                                this.axios.get('http://localhost:8080/getQuestions',{
+                                this.axios.get('http://localhost:8888/item/0',{
                                     params: {
                                         page: this.currentPage,
                                         limit:this.currentLimit,

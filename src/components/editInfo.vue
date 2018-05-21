@@ -1,6 +1,6 @@
 <template>
     <el-dialog title="编辑题目" :visible.sync="dialogFormEditVisible" :show-close="false">
-            <el-form>
+            <el-form :model="form">
                 <el-form-item>
                     <h3>ID</h3>
                     <el-input v-model="form.id" disabled></el-input>
@@ -10,7 +10,7 @@
                     <el-input v-model="form.difficult"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <h3>所属章节</h3>
+                    <h3>课程号</h3>
                     <el-input v-model="form.courseId"></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -24,6 +24,10 @@
                 <el-form-item >
                     <h3>答案</h3>
                     <el-input type="textarea" v-model="form.answer"></el-input>
+                </el-form-item>
+                <el-form-item >
+                    <h3>解析</h3>
+                    <el-input type="textarea" v-model="form.faq"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -39,7 +43,18 @@
      export default {
         data () {
             return {
-                form:{},
+                form:{
+                  type:'',
+                  difficult:'',
+                  courseId:'',
+                  question:'',
+                  pointId:'',
+                  answer:'',
+                  faq:'',
+                  additional:'',
+                  questionImg:{},
+                  answerImg:{}
+                },
                 clearQuestionImgs:false,
                 clearAnswerImgs:false,
                 dialogFormEditVisible:false,
@@ -52,7 +67,7 @@
                 answerImgCounter:0,
                 questionImgNameAry:[],
                 answerImgNameAry:[],
-                type:''
+                type:'0'
             }
         },
         methods:{
@@ -100,9 +115,12 @@
                 var params = new URLSearchParams();
                 params.append('type',this.type);
                 params.append('id',this.form.id);
-                params.append('level',this.form.level);
-                params.append('chapter',this.form.chapter);
+                params.append('difficult',this.form.difficult);
+                params.append('courseId',this.form.courseId);
+                params.append('pointId',this.form.pointId);
                 params.append('question',this.form.question);
+                params.append('answer',this.form.answer);
+                params.append('faq',this.form.faq);
                 params.append('clearQuestionImgs',this.clearQuestionImgs);
                 params.append('clearAnswerImgs',this.clearAnswerImgs);
                 var queLen = this.questionImgNameAry.length;
@@ -123,13 +141,14 @@
                     }
                     params.append('answerImgCounter',this.answerImgCounter);
                 }
-                this.axios.post('http://localhost:8080/updateQuestions',params)
+                this.axios.post('http://localhost:8888/item/update',params)
                 .then( res => {
                     loadingInstance.close();
                     this.$message.success('修改成功！');
                 })
                 .catch( res => {
                     loadingInstance.close();
+                    console.log(this.form);
                     this.$message.error('修改失败！');
                 })
                 this.clearImgs();
