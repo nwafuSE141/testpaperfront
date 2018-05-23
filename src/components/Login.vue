@@ -8,6 +8,7 @@
       <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
     <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
+    <p v-show="isShow" class="error">账号/密码错误</p>
     <el-form-item style="width:100%;">
       <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
       <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
@@ -22,9 +23,10 @@
     data() {
       return {
         logining: false,
+        isShow: false,
         ruleForm2: {
-          account: '2014012626',
-          checkPass: '123456'
+          account: '',
+          checkPass: ''
         },
         rules2: {
           account: [
@@ -47,15 +49,26 @@
         var _this = this;
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
-            let loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
-            this.logining = true;
+//            let loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
+            var params = new URLSearchParams();
+            params.append("username", this.ruleForm2.account);
+            params.append("password", this.ruleForm2.checkPass);
+            this.axios.post('http://localhost:8888/teacher/login',params)
+              .then( res => {
+                  if (res.data.body === true) {
+                    this.logining = true;
+                    _this.$router.push({ path: '/Home' });
+                  } else {
+                    this.isShow = true;
+                  }
+              });
             NProgress.start();
             setTimeout(() => {
                 sessionStorage.clear()
-                sessionStorage.setItem('userInfo', JSON.stringify(loginParams));
+                sessionStorage.setItem('userInfo', JSON.stringify(params));
                 _this.logining = false;
                 NProgress.done();
-                 _this.$router.push({ path: '/Home' });
+//                 _this.$router.push({ path: '/Home' });
             }, 1000);
           } else {
             console.log('error submit!!');
@@ -88,6 +101,10 @@
     }
     .remember {
       margin: 0px 0px 35px 0px;
+    }
+    .error {
+      margin: 0px 0px 35px 0px;
+      color: #505458;
     }
   }
 </style>

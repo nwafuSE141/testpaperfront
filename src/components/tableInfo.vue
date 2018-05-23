@@ -292,7 +292,7 @@
                         console.log("error");
                     })
                 } else {
-                    this.axios.get('http://localhost:8080/getQuestions',{
+                    this.axios.get('http://localhost:8888/item/' + this.region,{
                         params: {
                             page: val,
                             limit:this.currentLimit,
@@ -392,7 +392,7 @@
             var target = this;
             //监听增加题目发来的信息
             bus.$on('isLast', function (data) {
-                this.axios.get('http://localhost:8080/getQuestions',{
+                this.axios.get('http://localhost:8888/item/' + this.region,{
                     params: {
                         page: target.currentPage,
                         limit:target.currentLimit,
@@ -414,8 +414,8 @@
                 this.currentPage = 1;
                 this.axios.get('http://localhost:8888/item/'+ newValue,{
                     params: {
-//                        page: this.currentPage,
-//                        limit:this.currentLimit,
+                        page: this.currentPage,
+                        limit:this.currentLimit,
                     }
                 })
                 .then( res => {

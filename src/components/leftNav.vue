@@ -1,7 +1,7 @@
 <template>
     <el-menu
       :default-active="activeMenu"
-      
+
       class="el-menu-vertical"
       @select="handleSelect"
       @open="handleOpen"
@@ -36,7 +36,7 @@
         <span slot="title">导出试卷</span>
       </el-menu-item>
     </el-menu>
-  
+
 
 </template>
 
@@ -58,10 +58,10 @@
         this.$router.push(this.activeMenu)
       },
       handleOpen(key, keyPath) {
-        
+
       },
       handleClose(key, keyPath) {
-        
+
       }
     }
   }
