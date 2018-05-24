@@ -55,8 +55,10 @@
             params.append("password", this.ruleForm2.checkPass);
             this.axios.post('http://localhost:8888/teacher/login',params)
               .then( res => {
-                  if (res.data.body === true) {
-                    this.logining = true;
+                  if (res.data.body !== null) {
+                    _this.logining = true;
+                    sessionStorage.clear();
+                    sessionStorage.setItem('userInfo', JSON.stringify(res.data.body));
                     _this.$router.push({ path: '/Home' });
                   } else {
                     this.isShow = true;
@@ -64,8 +66,8 @@
               });
             NProgress.start();
             setTimeout(() => {
-                sessionStorage.clear()
-                sessionStorage.setItem('userInfo', JSON.stringify(params));
+//                sessionStorage.clear()
+//                sessionStorage.setItem('userInfo', JSON.stringify("1"));
                 _this.logining = false;
                 NProgress.done();
 //                 _this.$router.push({ path: '/Home' });

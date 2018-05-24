@@ -126,8 +126,7 @@
             :current-page="currentPage"
             :page-sizes="[20, 30, 40, 50]"
             :page-size="20"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="count">
+            layout="total, sizes, prev, pager, next, jumper">
             </el-pagination>
         </div>
     </div>
@@ -256,7 +255,6 @@
                     params: {
                         page: this.currentPage,
                         limit:val,
-                        type:this.region
                     }
                 })
                 .then( res => {
@@ -296,12 +294,11 @@
                         params: {
                             page: val,
                             limit:this.currentLimit,
-                            type:this.region
                         }
                     })
                     .then( res => {
                         this.loading = false;
-                        this.tableData = res.data.data;
+                        this.tableData = res.data.body;
                         this.count = res.data.count;
                     })
                     .catch( res => {
@@ -373,7 +370,6 @@
                 params: {
                     page: this.currentPage,
                     limit:this.currentLimit,
-                    type: 1
                 }
             })
             .then( res => {
@@ -396,7 +392,6 @@
                     params: {
                         page: target.currentPage,
                         limit:target.currentLimit,
-                        type:target.region
                     }
                 })
                 .then( res => {
