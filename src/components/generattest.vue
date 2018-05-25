@@ -115,7 +115,7 @@
                 mutipNum: 10,//多选题
                 fillNum: 10,//填空
                 trueoffalseNum: 10,//判断题
-                questionNum: 2,//问答题
+                questionNum: 4,//问答题
 
                 srcpercent: 0
             }
@@ -292,7 +292,8 @@
 <style scoped>
     .title {
         font-size: 26px;
-        font-family: '楷体'
+        font-family: '楷体';
+        text-align: center
     }
     .point {
         margin-left: 15px;

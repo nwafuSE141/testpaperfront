@@ -59,7 +59,7 @@ export default {
     }
 
     nav {
-      width: 17%;
+      width: 15%;
       height: 100%;
       float: left;
     }

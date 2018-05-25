@@ -125,7 +125,7 @@
                     params.append("name",param.name)
                     console.log(param.id + "  " + param.name)
 
-                    this.axios.post('http://localhost:8888/paperinfo/output',params)
+                    this.axios.post('http://172.19.12.23:8888/paperinfo/output',params)
                     .then( res => {
                         this.$message.success('生成成功！');
                     })
