@@ -1,11 +1,19 @@
 <template>
     <div class="loadingmain">
         <section>
-            <h3 class="title">试卷题目</h3>
-            <el-input v-model="input" placeholder="请输入试卷题目" style="width: 400px;"></el-input>
+            <h3 class="title">试卷参数设置</h3>
+            试卷题目：<el-input v-model="input" placeholder="请输入试卷题目" style="width: 300px;"></el-input>
+            单选题目数：<el-input v-model="singleNum" style="width: 100px;"></el-input>
+            多选题目数：<el-input v-model="mutipNum" style="width: 100px;"></el-input>
+            填空题目数：<el-input v-model="fillNum" style="width: 100px;"></el-input>
+            判断题目数：<el-input v-model="trueoffalseNum" style="width: 100px;"></el-input>
+            问答题目数：<el-input v-model="questionNum" style="width: 100px;"></el-input>
         </section>
         <section>
-            <h3 class="title">抽取非选题</h3>
+            <h3 class="title">抽取选题</h3>
+            <el-progress :text-inside="true" :stroke-width="18" :percentage="srcpercent" status="success"></el-progress>
+
+            <div/>
             <el-select v-model="type" placeholder="请选择题型" class="select-type" @change="selectQuestionType">
                 <el-option label="单选题" value="10001" selected="selected"></el-option>
                 <el-option label="多选题" value="10002"></el-option>
@@ -13,8 +21,11 @@
                 <el-option label="判断题" value="10004"></el-option>
                 <el-option label="问答题" value="10005"></el-option>
             </el-select>
+            
             <el-table :data="tableData" border stripe v-loading="loading" style="width: 100%;margin-top:10px" max-height="449" highlight-current-row :cell-style="styleFunc">
                 <el-table-column prop="id" label="ID" width="60" align="center" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column prop="knowledge" label="知识点" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="question" label="题干" width="350" align="center" show-overflow-tooltip>
                 </el-table-column>
@@ -48,20 +59,20 @@
         </section>
         <hr>
         <h3 class="title">已选题目：</h3>
-        <el-tabs v-model="activeName"  type="border-card">
-            <el-tab-pane label="单选题" name="first">
+        <el-tabs v-model="type"  type="border-card">
+            <el-tab-pane label="单选题" name="10001">
                 <selectproject1></selectproject1>
             </el-tab-pane>
-            <el-tab-pane label="多选题" name="second">
+            <el-tab-pane label="多选题" name="10002">
                 <selectproject2></selectproject2>
             </el-tab-pane>
-            <el-tab-pane label="填空题" name="third">
+            <el-tab-pane label="填空题" name="10003">
                 <selectproject3></selectproject3>
             </el-tab-pane>
-            <el-tab-pane label="判断题" name="fourth">
+            <el-tab-pane label="判断题" name="10004">
                 <selectproject4></selectproject4>
             </el-tab-pane>
-            <el-tab-pane label="问答题" name="fifth">
+            <el-tab-pane label="问答题" name="10005">
                 <selectproject5></selectproject5>
             </el-tab-pane>
         </el-tabs>
@@ -98,7 +109,15 @@
                 multipleSelect: '', //简答题
                 fillblank: '', //求解题
                 tureorfalse: '', //设计题
-                quesAndAns: '' //应用题
+                quesAndAns: '' ,//应用题,
+
+                singleNum: 10,//选择题数
+                mutipNum: 10,//多选题
+                fillNum: 10,//填空
+                trueoffalseNum: 10,//判断题
+                questionNum: 2,//问答题
+
+                srcpercent: 0
             }
         },
         methods: {
@@ -125,16 +144,49 @@
             },
             selectItem(param) { //单个增加题目
                 var number = Number(this.type);
+                bus.$emit('needids', true);
+                let _this = this
                 if (number === 10001) {
+                    let curNum = Number(_this.singleNum) - 1
+                    if(curNum < _this.singleSelect.length ){
+                        _this.$confirm('单选题已选满' + _this.singleNum + '道！ 请重新检查')
+                        return false
+                    }
                     bus.$emit("addData1", param);
+                    this.srcpercent += param.score
+                    
                 } else if (number === 10002) {
+                    let curNum = Number(_this.mutipNum) - 1
+                    if(curNum < _this.multipleSelect.length ){
+                        _this.$confirm('多选题已选满' + _this.mutipNum + '道！ 请重新检查')
+                        return false
+                    }
                     bus.$emit("addData2", param);
+                    this.srcpercent += param.score
                 } else if (number === 10003) {
+                    let curNum = Number(_this.fillNum) - 1
+                    if(curNum < _this.fillblank.length ){
+                        _this.$confirm('填空选题已选满' + _this.fillNum + '道！ 请重新检查')
+                        return false
+                    }
                     bus.$emit("addData3", param);
+                    this.srcpercent += param.score
                 } else if (number === 10004) {
+                    let curNum = Number(_this.trueoffalseNum) - 1
+                    if(curNum < _this.tureorfalse.length ){
+                        _this.$confirm('判断题已选满' + _this.trueoffalseNum + '道！ 请重新检查')
+                        return false
+                    }
                     bus.$emit("addData4", param);
+                    this.srcpercent += param.score
                 } else if (number === 10005) {
+                    let curNum = Number(_this.questionNum) - 1
+                    if(curNum < _this.quesAndAns.length ){
+                        _this.$confirm('判断题已选满' + _this.questionNum + '道！ 请重新检查')
+                        return false
+                    }
                     bus.$emit("addData5", param);
+                    this.srcpercent += param.score
                 }
             },
             handleCurrentChange(val) { //更改当前页,重新发起请求
@@ -171,10 +223,7 @@
                             this.$confirm('试卷题目不能为空')
                             return false
                         }
-                        if(this.singleSelect.length != 3){
-                            this.$confirm('单项选择题数目必须为3！')
-                            return false
-                        }
+                    
                         if(this.multipleSelect.length == 0 || this.fillblank.length == 0 || this.tureorfalse.length == 0 || this.quesAndAns == 0){
                             this.$confirm('所有题型不能为空')
                             return false
@@ -184,9 +233,11 @@
                             .then(res => {
                                 console.log(res.data.stat)
                                 if(res.data.stat === 'no'){
+                                    this.$confirm(res.data.msg)
                                     this.$message.error(res.data.msg);
                                     return
                                 }
+                                this.$confirm(res.data.msg)
                                 this.$message.success(res.data.msg);
                                 this.loading = false;
                             })

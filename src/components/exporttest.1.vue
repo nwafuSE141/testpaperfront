@@ -51,7 +51,9 @@
             width="280"
             align="center">
                 <template slot-scope="scope">
-                    <el-button  size="mini" type="warning" @click="output(scope.row)"><i class="el-icon-edit-outline">生成试卷</i></el-button>
+                    <el-button  size="mini" type="warning" @click="deleteItem(scope.row.id)"><i class="el-icon-delete"></i></el-button>
+                    <a  :download="vdownload|myname(scope.row.id)"  :href="vhref|myhreftest(scope.row.discription)">下载试题</a>
+                    <a  :download="vdownload|myname(scope.row.id)"  :href="vhref|myhrefanswer(scope.row.discription)">下载答案</a>
                 </template>
             </el-table-column>              
         </el-table>
@@ -114,28 +116,6 @@
                 }).catch(() => {
                 });
             },
-            output(param){ 
-                 this.$confirm('试卷将在后台生成', '提示',{
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    var params = new URLSearchParams();
-                    params.append("id",param.id);
-                    params.append("name",param.name)
-                    console.log(param.id + "  " + param.name)
-
-                    this.axios.post('http://localhost:8888/paperinfo/output',params)
-                    .then( res => {
-                        this.$message.success('生成成功！');
-                    })
-                    .catch( res => {
-                        this.$message.error('生成失败！');
-                    })
-                }).catch(() => {
-                });
-
-            },
             styleFunc(row,rowIndex){   //更改样式
                 return {padding:'5px 0',hieght:'23px',lineHeight:'23px'}
             },
@@ -177,6 +157,21 @@
         mounted(){  //获取试题文件列表
 
             this.getPaperList();
+            // this.axios.get('http://172.19.12.23:8080/showQuestionnaire',{
+            //     params: {
+            //         page: this.currentPage,
+            //         limit:20
+            //     }
+            // })
+            // .then( res => {
+            //     this.loading = false;
+            //     this.tableData = res.data.data;
+            //     this.count = res.data.count;
+            // })
+            // .catch( res => {
+            //     this.loading = false;
+            //     console.log('error');
+            // })
         }
     }
 </script>

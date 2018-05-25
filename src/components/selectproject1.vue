@@ -35,7 +35,7 @@
                 <el-table-column
                 prop="answer"
                 label="答案"
-                width="250"
+                width="150"
                 align="center"
                 show-overflow-tooltip>
                 </el-table-column>

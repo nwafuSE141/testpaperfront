@@ -145,7 +145,7 @@ import bus from './BUS.vue'
                 this.curRow = row
                 let params = new URLSearchParams();
                 params.append("paperId", row.id);
-                this.axios.post('http://localhost:8888/paperinfo/getpapercompleteinfo', params)
+                this.axios.post('http://172.19.12.23:8888/paperinfo/getpapercompleteinfo', params)
                     .then(res => {
                         this.paperInfo = res.data.data;
                         this.loading = false;
@@ -160,7 +160,7 @@ import bus from './BUS.vue'
                 let params = new URLSearchParams();
                 params.append("stat", 2);
                 this.axios
-                    .post("http://localhost:8888/paper/gettestpaperwithstat", params)
+                    .post("http://172.19.12.23:8888/paper/gettestpaperwithstat", params)
                     .then(res => {
                         this.tableData = res.data.data;
                         this.loading = false;
@@ -183,7 +183,7 @@ import bus from './BUS.vue'
                         let params = new URLSearchParams();
                         params.append("paperId", row.id);
                         params.append("userId", Number(this.userInfo.username))
-                        this.axios.post('http://localhost:8888/paper/approve', params)
+                        this.axios.post('http://172.19.12.23:8888/paper/approve', params)
                             .then(res => {
                                 this.loading = false;
                                 this.$message.success(res.data.msg);
@@ -209,7 +209,7 @@ import bus from './BUS.vue'
                         let params = new URLSearchParams();
                         params.append("paperId", row.id);
                         params.append("userId", Number(this.userInfo.username))
-                        this.axios.post('http://localhost:8888/paper/auditnotpassed', params)
+                        this.axios.post('http://172.19.12.23:8888/paper/auditnotpassed', params)
                             .then(res => {
                                 this.loading = false;
                                 this.$message.success(res.data.msg);

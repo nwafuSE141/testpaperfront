@@ -143,7 +143,7 @@
                 this.curRow = row
                 let params = new URLSearchParams();
                 params.append("paperId", row.id);
-                this.axios.post('http://localhost:8888/paperinfo/getpapercompleteinfo', params)
+                this.axios.post('http://172.19.12.23:8888/paperinfo/getpapercompleteinfo', params)
                     .then(res => {
                         this.paperInfo = res.data.data;
                         this.loading = false;
@@ -177,7 +177,7 @@
 
                         let params = new URLSearchParams();
                         params.append("paperId", row.id);
-                        this.axios.post('http://localhost:8888/paperorganize/submitreview', params)
+                        this.axios.post('http://172.19.12.23:8888/paperorganize/submitreview', params)
                             .then(res => {
                                 this.loading = false;
                                 this.$message.success(res.data.msg);
@@ -207,7 +207,7 @@
 
                         let params = new URLSearchParams();
                         params.append("paperId", row.id);
-                        this.axios.post('http://localhost:8888/paperorganize/cancelreview', params)
+                        this.axios.post('http://172.19.12.23:8888/paperorganize/cancelreview', params)
                             .then(res => {
                                 this.loading = false;
                                 this.$message.success(res.data.msg);
@@ -226,7 +226,7 @@
                 let params = new URLSearchParams();
                 params.append("userId", Number(this.userInfo.username));
                 this.axios
-                    .post("http://localhost:8888/paper/getpaperwithuserid", params)
+                    .post("http://172.19.12.23:8888/paper/getpaperwithuserid", params)
                     .then(res => {
                         this.tableData = res.data.data;
                         this.loading = false;

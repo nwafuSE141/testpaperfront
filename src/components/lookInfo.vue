@@ -77,7 +77,7 @@
                 let imgs = imgStr.split('-'); 
                 for (let i = 0; i < imgs.length; i ++) {
                     let myimg = document.createElement('img');
-                    myimg.src = 'http://localhost:8080/quest/layui/images/' + imgs[i];
+                    myimg.src = 'http://172.19.12.23:8080/quest/layui/images/' + imgs[i];
                     myimg.className = 'myimg';
                     myimg.style = "width:50%;height:50%;margin:0 auto";
                     // DOM 更新了

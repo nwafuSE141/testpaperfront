@@ -1,7 +1,9 @@
 <template>
     <div>
         <h1>欢迎使用组卷系统</h1>
-        <div id="main"></div>
+        <div id="main">
+            <img id="main" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527234397451&di=0593d50b28a44636b53f8917da8e28cf&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F4034970a304e251fab7cbfd1ac86c9177f3e530b.jpg"/>
+        </div>
     </div>
 </template>
 
