@@ -52,6 +52,8 @@
             align="center">
                 <template slot-scope="scope">
                     <el-button  size="mini" type="warning" @click="output(scope.row)"><i class="el-icon-edit-outline">生成试卷</i></el-button>
+                    <!-- <el-button  size="mini" type="warning" @click="dowload(scope.row)"><i class="el-icon-download">下载试卷</i></el-button> -->
+                    <a :href=" 'http://172.19.12.23:8888/file/download/'+ scope.row.id + '.txt'"><i class="el-icon-download">下载试卷</i></a>
                 </template>
             </el-table-column>              
         </el-table>
@@ -135,6 +137,17 @@
                 }).catch(() => {
                 });
 
+            },
+            dowload(param){
+                var params = new URLSearchParams();
+                params.append("id",param.id);
+                this.axios.post('http://172.19.12.23:8888/file/download',params)
+                    .then( res => {
+                        this.$message.success('下载成功！');
+                    })
+                    .catch( res => {
+                        this.$message.error('下载失败！');
+                    })
             },
             styleFunc(row,rowIndex){   //更改样式
                 return {padding:'5px 0',hieght:'23px',lineHeight:'23px'}
