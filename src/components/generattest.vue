@@ -224,10 +224,31 @@
                             return false
                         }
                     
-                        if(this.multipleSelect.length == 0 || this.fillblank.length == 0 || this.tureorfalse.length == 0 || this.quesAndAns == 0){
+                        if(this.singleSelect.length == 0 || this.multipleSelect.length == 0 || this.fillblank.length == 0 || this.tureorfalse.length == 0 || this.quesAndAns == 0){
                             this.$confirm('所有题型不能为空')
                             return false
                         }
+                        if(this.multipleSelect.length != this.mutipNum){
+                            this.$confirm('多选题参数与所选数量不符')
+                            return false
+                        }
+                        if(this.singleSelect.length != this.singleNum){
+                            this.$confirm('单选题参数与所选数量不符')
+                            return false
+                        }
+                        if(this.fillblank.length != this.fillNum){
+                            this.$confirm('填空题参数与所选数量不符')
+                            return false
+                        }
+                        if(this.tureorfalse.length != this.trueoffalseNum){
+                            this.$confirm('判断题参数与所选数量不符')
+                            return false
+                        }
+                        if(this.quesAndAns.length != this.questionNum){
+                            this.$confirm('问答题题参数与所选数量不符')
+                            return false
+                        }
+
                         this.$nextTick(function() {
                             this.axios.post('http://172.19.12.23:8888/paperorganize/addpaper', resObj)
                             .then(res => {

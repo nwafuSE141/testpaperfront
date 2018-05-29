@@ -2,7 +2,7 @@
     <div>
         <section>
             <h3 class="title">试卷列表</h3>
-            <el-table :data="tableData" border stripe v-loading="loading" style="width: 100%;margin-top:10px" max-height="449" highlight-current-row :cell-style="styleFunc">
+            <el-table :data="tableData" border stripe v-loading="loading" style="width: 100%;margin-top:10px" max-height="800" highlight-current-row :cell-style="styleFunc">
                 <el-table-column prop="id" label="ID" width="60" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="name" label="试卷名字" width="150" align="center" show-overflow-tooltip>

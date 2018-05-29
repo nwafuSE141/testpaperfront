@@ -177,12 +177,20 @@ import bus from './BUS.vue'
                     type: 'warning'
                 }).then(() => {
 
+                        if(this.userInfo.username == row.creatorId){
+                            this.$confirm('试卷创建人无法审核自己的试卷', {type: 'warning'})
+                            return false;
+                        }
+
                         bus.$emit('needids', true);
 
                         this.curRow = row
                         let params = new URLSearchParams();
                         params.append("paperId", row.id);
                         params.append("userId", Number(this.userInfo.username))
+
+
+
                         this.axios.post('http://172.19.12.23:8888/paper/approve', params)
                             .then(res => {
                                 this.loading = false;
@@ -204,6 +212,11 @@ import bus from './BUS.vue'
                     type: 'warning'
                 }).then(() => {
                         bus.$emit('needids', true);
+
+                        if(this.userInfo.username == row.creatorId){
+                            this.$confirm('试卷创建人无法审核自己的试卷', {type: 'warning'})
+                            return false;
+                        }
                         
                         this.curRow = row
                         let params = new URLSearchParams();
