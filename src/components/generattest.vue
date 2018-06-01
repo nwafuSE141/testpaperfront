@@ -27,6 +27,8 @@
                 </el-table-column>
                 <el-table-column prop="knowledge" label="知识点" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
+                <el-table-column prop="difficult" label="难度" width="50" align="center" show-overflow-tooltip>
+                </el-table-column>
                 <el-table-column prop="question" label="题干" width="350" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="optioncontent" label="选项内容" width="250" align="center" show-overflow-tooltip>

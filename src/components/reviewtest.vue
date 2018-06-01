@@ -40,6 +40,14 @@
             :before-close="handleClose">
             <div>
                 <el-card class="box-card">
+                    <div>
+                        考察知识点数量: {{paperInfo.knowlageNum}}<br/>
+                        简单题数量: {{paperInfo.easynum}}<br/>
+                        普通题数量：{{paperInfo.normalNum}}<br/>
+                        困难提数量：{{paperInfo.hardNum}}
+                    </div>
+                </el-card>
+                <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span>一、单选题</span>
                     </div>
