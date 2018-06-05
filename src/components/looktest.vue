@@ -13,11 +13,12 @@
                 </el-table-column>
                 <el-table-column prop="reviewer" label="审核人" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column label="操作" width="400" align="center">
+                <el-table-column label="操作" width="450" align="center">
                     <template slot-scope="scope">
                                     <el-button  size="mini" type="success" @click="viewDetail(scope.row)"><i class="el-icon-view"></i>查看</el-button>
-                                    <el-button  size="mini" type="primary" @click="submitreview(scope.row)"><i class="el-icon-plus"></i>提交审核</el-button>
-                                    <el-button  size="mini" type="info" @click="cancelreview(scope.row)"><i class="el-icon-minus"></i>撤销审核</el-button>
+                                    <el-button  size="mini" type="primary" @click="submitreview(scope.row)"><i class="el-icon-plus"></i>提交</el-button>
+                                    <el-button  size="mini" type="info" @click="cancelreview(scope.row)"><i class="el-icon-minus"></i>撤销</el-button>
+                                    <el-button  size="mini" type="warning" @click="deletetest(scope.row)"><i class="el-icon-delete"></i>删除</el-button>
                                     <!-- <el-button  size="mini" type="success" @click="editDetail(scope.row.id)"><i class="el-icon-view"></i>编辑</el-button> -->
 </template>
             </el-table-column>              
@@ -198,6 +199,33 @@
                 }).catch(() => {    
                 });
             
+            },
+            deletetest(row){
+                this.$confirm('《'+row.name+'》确定删除吗, 是否继续?', '提示',{
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                        if(row.state != 2){
+                            this.$confirm(row.name+"试卷已" + row.status +",请重新检查")
+                            return;
+                        }
+                        this.curRow = row
+                        let params = new URLSearchParams();
+                        params.append("id", row.id);
+                        this.axios.post('http://172.19.12.23:8888/paper/deletepaper', params)
+                            .then(res => {
+                                this.loading = false;
+                                this.$message.success(res.data.msg);
+                                this.getPaperList();
+                            })
+                            .catch(res => {
+                                this.loading = false;
+                                console.log("error");
+                            })
+                }).catch(() => {    
+                });
+
             },
             
             cancelreview(row) {

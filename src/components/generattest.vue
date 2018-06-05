@@ -25,19 +25,19 @@
             <el-table :data="tableData" border stripe v-loading="loading" style="width: 100%;margin-top:10px" max-height="449" highlight-current-row :cell-style="styleFunc">
                 <el-table-column prop="id" label="ID" width="60" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="knowledge" label="知识点" width="150" align="center" show-overflow-tooltip>
+                <el-table-column prop="knowledge" sortable label="知识点" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="difficult" label="难度" width="50" align="center" show-overflow-tooltip>
+                <el-table-column prop="difficult" sortable label="难度" width="80" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="question" label="题干" width="350" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="optioncontent" label="选项内容" width="250" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="answer" label="答案" width="250" align="center" show-overflow-tooltip>
+                <el-table-column prop="answer" label="答案" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="score" label="分值" width="80" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="usageCount" label="使用次数" width="80" align="center" show-overflow-tooltip>
+                <el-table-column prop="usageCount" sortable label="使用次数" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="faq" label="备注" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <section>
-            <h3 class="title">试卷列表</h3>
+            <h3 class="title">审核列表</h3>
             <el-table :data="tableData" border stripe v-loading="loading" style="width: 100%;margin-top:10px" max-height="449" highlight-current-row :cell-style="styleFunc">
                 <el-table-column prop="id" label="ID" width="60" align="center" show-overflow-tooltip>
                 </el-table-column>
