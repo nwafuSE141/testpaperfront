@@ -29,7 +29,7 @@
                 </el-table-column>
                 <el-table-column prop="difficult" sortable label="难度" width="80" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="question" label="题干" width="350" align="center" show-overflow-tooltip>
+                <el-table-column prop="question" label="题干" width="250" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="optioncontent" label="选项内容" width="250" align="center" show-overflow-tooltip>
                 </el-table-column>
@@ -44,8 +44,8 @@
                 <el-table-column label="操作" width="150" align="center">
                     <template slot-scope="scope">
                                 <el-button  size="mini" type="success" @click="selectItem(scope.row)">使用</el-button>
-</template>
-            </el-table-column>              
+                    </template>
+                </el-table-column>
         </el-table>
 
          <!-- 分页 -->

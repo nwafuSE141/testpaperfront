@@ -7,9 +7,9 @@
                 </el-table-column>
                 <el-table-column prop="name" label="试卷名字" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="createTimeFormat" label="创建时间" width="150" align="center" show-overflow-tooltip>
+                <el-table-column prop="createTimeFormat" sortable label="创建时间" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column prop="status" label="状态" width="150" align="center" show-overflow-tooltip>
+                <el-table-column prop="status" sortable label="状态" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column prop="reviewer" label="审核人" width="150" align="center" show-overflow-tooltip>
                 </el-table-column>
@@ -206,7 +206,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                        if(row.state != 2){
+                        if(row.state == 1){
                             this.$confirm(row.name+"试卷已" + row.status +",请重新检查")
                             return;
                         }
